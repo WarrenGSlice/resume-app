@@ -1,0 +1,47 @@
+.resume-page {
+    display: flex;
+    padding: 25px;
+    height: 100vh;
+    transition: all 0.3s ease;
+  }
+  
+  .navbar-open {
+    margin-left: 200px; /* Navbar open size */
+  }
+  
+  .navbar-closed {
+    margin-left: 50px; /* Navbar closed size */
+  }
+  
+  .toggle-navbar {
+    position: absolute;
+    top: 50%;
+    left: 10px;
+    background-color: #e5e5e5;
+    border: none;
+    cursor: pointer;
+    padding: 5px 10px;
+  }
+  
+  .chatbox-container, .resumebox-container {
+    flex: 1;
+    margin: 0 10px; /* Ensures equal margin between both containers */
+    padding: 25px;
+    background-color: #f5f6fa;
+    border: 1px solid #ccc;
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - 120px); /* accounting for the padding */
+  }
+
+
+  
+  @media screen and (max-width: 768px) {
+    .resume-page {
+      flex-direction: column;
+    }
+  
+    .navbar-open, .navbar-closed {
+      margin-left: 0;
+    }
+  }
