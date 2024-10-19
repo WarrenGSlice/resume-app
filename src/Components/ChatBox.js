@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './ChatBox.css';
 
-const ChatBox = () => {
+const ChatBox = ({onResumeUpload}) => {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
 
@@ -19,6 +19,16 @@ const ChatBox = () => {
     }
   };
 
+  const handleFileChange = (event) => {
+    const file = event.target.files[0];
+    if (file && file.type === "application/pdf") {
+      const fileURL = URL.createObjectURL(file);
+      onResumeUpload(fileURL); // Pass the file URL to the parent component
+    } else {
+      alert("Please upload a valid PDF file.");
+    }
+  };
+
   return (
     <div className="chatbox-container">
       <div className="messages-container">
@@ -28,8 +38,16 @@ const ChatBox = () => {
           </div>
         ))}
       </div>
+
       <div className="input-container">
-        <button className="attach-btn">📎</button>
+        <input
+          type="file"
+          id="file-upload"
+          accept="application/pdf"
+          style={{ display: "none" }}
+          onChange={handleFileChange} // Handle file change
+        />
+        <label htmlFor="file-upload" className="attach-btn">📎</label>
         <input
           type="text"
           placeholder="What are your suggestions for my resume?"
