@@ -1,3 +1,26 @@
+# Contributing to the resume app
+## I. Initial Steup
+
+### 1. Fork this Repo to Your Github Account
+- Click on the Fork button
+<br/>
+
+### 2. Configure the application to work on your IDE of choice.
+- For VS Code, you can clone the forked repository to your editor.
+- After cloning the repository, go through the package.json files dependencies and ensure they are all installed on your application.
+- Running npm install will help build the node_modules libraries needed to run the application.
+- Run Npm Start in your terminal to ensure the application runs,
+
+### 3. Adding New commits
+- Feel free to add any new features and edits to the forked repository, it's like a safe sandbox to experiment.
+- Before pushing changes, please ensure that your features or add-on's work completely, or at least don't create errors or crashes when running the applicaiton.
+- Once finishing a feature or section, push it to the forked repo and let me know it's ready to be rolled out. I will then merge your forked branch into the main branch.
+
+### 4. Troubleshooting
+- If there are any issues getting this to work on your own computer, feel free to DM me 
+
+
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
