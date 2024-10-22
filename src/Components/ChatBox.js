@@ -5,11 +5,37 @@ const ChatBox = ({onResumeUpload}) => {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
 
-  const handleSend = () => {
+  const handleSend = async () => {
     if (input.trim()) {
-      setMessages([...messages, input]);
-      setInput("");
+      setMessages(messages => [
+        ...messages, 
+        { role: "user", content: input }
+      ]);
     }
+
+    try{
+    // Send the message to the server for processing and usage in API calls
+    //uses the standard localhost endpoint for now, will most likely have a custom one
+    const response = await fetch('http://127.0.0.1:8000/process-message', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ message: input })
+    });
+
+    const data = await response.json();
+
+    setMessages(messages => [
+      ...messages, 
+      { role: "user", content: input }, //distinction between user and assistant
+      { role: "assistant", content: data.response } //assistant as in API
+    ]);
+
+    } catch (error) {
+      console.error('Error generating a response:', error);
+    }
+
+    setInput(""); // Clear the input field after usage
+
   };
 
   const handleKeyPress = (event) => {
@@ -33,9 +59,9 @@ const ChatBox = ({onResumeUpload}) => {
     <div className="chatbox-container">
       <div className="messages-container">
         {messages.map((msg, index) => (
-          <div className="message" key={index}>
-            {msg}
-          </div>
+          <div className={`message ${msg.role}`} key={index}>
+          {msg.content} {/* Rendering just the content of each message */}
+        </div>
         ))}
       </div>
 

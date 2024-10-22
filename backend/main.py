@@ -1,13 +1,17 @@
 from fastapi import FastAPI, File, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
+from generate.apiCall import process_message  # Import the process_message function
 
 
 app = FastAPI()
 
+origins = [
+    "http://localhost:3000",
+]
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # replace '*' with our own origin link
+    allow_origins=[origins],  # uses default local host on machine
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -32,6 +36,7 @@ async def parse_resume(user_id: int):
     return {"parsed_data": "Relevant info extracted"}
 
 # API endpoint for generating suggestions based on the parsed resume
+# this is in the case of pre-user-input suggestions (if we choose to do so)
 @app.post("/generate_suggestions/{user_id}")
 async def generate_suggestions(user_id: int):
     # Run parsed resume data through a generative AI model (e.g., OpenAI API)
