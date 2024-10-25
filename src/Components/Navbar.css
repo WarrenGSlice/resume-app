@@ -22,12 +22,12 @@
 
 .burger-button {
     position: fixed;
-    right: 83px;
-    top: 35px;
+    right: 5%;
+    bottom: 35px;
     z-index: 9998;
     cursor: pointer;
     padding: 5px 4px;
-    background-color: transparent;
+    background-color: green;
 }
 .burger-button.white i{background-color:#fff}
 
