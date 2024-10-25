@@ -20,45 +20,8 @@ const ChatBox = ({onResumeUpload, onAutoMessage, onDownloadClick}) => {
     }
   }, [autoMessageSent, messages, onAutoMessage]);
 
-  const handleSend = async () => {
+  const handleSend = () => {
     if (input.trim()) {
-
-      
-      
-      
-      
-      setMessages(messages => [
-        ...messages, 
-        { role: "user", content: input }
-      ]);
-    }
-
-    try {
-      // Send the user's message to the FastAPI backend
-      const response = await fetch("http://127.0.0.1:8000/chat", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ message: input }),
-      });
-
-      if (!response.ok) throw new Error("Failed to get response from the server");
-
-      const data = await response.json();
-      const aiMessage = { role: "assistant", content: data.response };
-
-      // Append AI response to chat
-      setMessages((prevMessages) => [...prevMessages, aiMessage]);
-      setInput(""); // Clear input field
-
-    } catch (error) {
-      console.error("Error:", error);
-      
-      
-      
-      
-      
       const newMessage = { text: input, isAuto: false }; // Regular user message
       setMessages([...messages, newMessage]);
       setInput("");
@@ -86,9 +49,6 @@ const ChatBox = ({onResumeUpload, onAutoMessage, onDownloadClick}) => {
     <div className="chatbox-container">
       <div className="messages-container">
         {messages.map((msg, index) => (
-          <div className={`message ${msg.role}`} key={index}>
-          {msg.content} {/* Rendering just the content of each message */}
-        </div>
           <div
             className={`message ${msg.isAuto ? 'auto-message' : ''}`}
             key={index}
