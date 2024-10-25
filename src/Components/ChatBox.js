@@ -13,29 +13,28 @@ const ChatBox = ({onResumeUpload}) => {
       ]);
     }
 
-    try{
-    // Send the message to the server for processing and usage in API calls
-    //uses the standard localhost endpoint for now, will most likely have a custom one
-    const response = await fetch('http://127.0.0.1:8000/process-message', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ message: input })
-    });
+    try {
+      // Send the user's message to the FastAPI backend
+      const response = await fetch("http://127.0.0.1:8000/chat", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ message: input }),
+      });
 
-    const data = await response.json();
+      if (!response.ok) throw new Error("Failed to get response from the server");
 
-    setMessages(messages => [
-      ...messages, 
-      { role: "user", content: input }, //distinction between user and assistant
-      { role: "assistant", content: data.response } //assistant as in API
-    ]);
+      const data = await response.json();
+      const aiMessage = { role: "assistant", content: data.response };
+
+      // Append AI response to chat
+      setMessages((prevMessages) => [...prevMessages, aiMessage]);
+      setInput(""); // Clear input field
 
     } catch (error) {
-      console.error('Error generating a response:', error);
+      console.error("Error:", error);
     }
-
-    setInput(""); // Clear the input field after usage
-
   };
 
   const handleKeyPress = (event) => {

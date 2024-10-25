@@ -1,26 +1,63 @@
 from fastapi import FastAPI, File, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 from generate.apiCall import process_message  # Import the process_message function
+from pydantic import BaseModel
+from dotenv import load_dotenv
+from openai import OpenAI
+from generate.apiCall import process_message
 
 
 app = FastAPI()
 
-origins = [
-    "http://localhost:3000",
-]
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[origins],  # uses default local host on machine
+    allow_origins=["http://localhost:3000"],  # uses default local host on machine
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
+class MessageRequest(BaseModel):
+    message: str
+
+@app.post("/chat")
+async def chat(message: MessageRequest):
+    try:
+        response = await process_message(message)
+        print("Response from process_message:", response)  # Debugging print
+        return response
+
+    except Exception as e:
+        print(f"Error: {e}")  
+        raise HTTPException(status_code=500, detail="Error with OpenAI API")
+
+# Define request model
+class ResumeRequest(BaseModel):
+    resume_text: str
+
+# test function for embedding resume
+@app.post("/improve-resume")
+async def improve_resume(request: ResumeRequest):
+    try:
+        # Send the resume text to OpenAI for suggestions
+        response = openai.Completion.create(
+            model="gpt-3.5-turbo",
+            prompt=f"Suggest improvements for this resume:\n\n{request.resume_text}",
+            max_tokens=50
+        )
+
+        # Extract the suggestion text
+        suggestions = response.choices[0].text.strip()
+        return {"suggestions": suggestions}
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail="Error with OpenAI API")
+
 # initial server screen
 @app.get("/")
 async def root():
-    return {"message": "basic screen"}
+    return {"message": "testing access"}
 
 # API endpoint for uploading a resume file to database
 @app.post("/upload_resume")
