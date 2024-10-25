@@ -117,6 +117,7 @@ body{
 
 .resume-card {
     max-width: 33%; /* Ensure the container takes up the full width */
+    width: 15.9%;
     height: auto; /* Set height to auto to scale dynamically */
     max-height: 33vh; /* Ensure it doesn't exceed the viewport height */
     overflow: hidden; /* Hide content that overflows the box */
@@ -128,6 +129,7 @@ body{
     border-bottom-left-radius: 10px;
     border-bottom-right-radius: 10px;
     transition: background-color 0.3 ease;
+    clip-path: inset(0 19% 0 0);
 }/* Limit the resume display box to a specific height */
 /*.resume-card {
     position: relative;
@@ -144,9 +146,8 @@ body{
     /*max-height: 100%; /* Ensure the canvas doesn't overflow vertically */
     /*height: auto; /* Maintain aspect ratio */
     display: flex;
-    margin: 0; /* Center the canvas horizontally */
-    border: 1px red;
-    
+    padding: 0;
+    margin-left: -24px;
 }
 
 .resume-card:hover {
@@ -173,10 +174,13 @@ body{
     bottom: 0;
     left: 3.5%;
     width: 86.5%;
-    text-align: center;
     font-weight: bold;
     /*border-bottom-left-radius: 5px;
     border-bottom-right-radius: 10px;*/
+}
+
+.resume-overlay p {
+    padding-left: 8.5%;
 }
 
 .resume-overlay a {

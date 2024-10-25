@@ -104,7 +104,7 @@ const Dashboard = () => {
                     <h3>Your Past Resumes</h3>
                     <div className="resume-grid">
                         {savedResumes.map(resume => (
-                            <div className="resume-card" key={resume.id} onClick={() => handleResumeClick(resume.url)}>
+                            <div className="resume-card" key={resume.id} onClick={() => handleResumeClick(resume.url)} >
                                 <ResumeBox resumeUrl={resume.url} />
                                 <div className="resume-overlay">
                                 <p>{`${resume.name} - ${resume.date}`}</p>
