@@ -10,8 +10,6 @@ kylesnotes.txt
 /.pnp
 .pnp.js
 
-/venv
-
 # testing
 /coverage
 
