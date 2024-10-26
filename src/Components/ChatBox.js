@@ -1,68 +1,40 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import './ChatBox.css';
 
-const ChatBox = ({onResumeUpload, onAutoMessage, onDownloadClick}) => {
+const ChatBox = ({onResumeUpload}) => {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
-  const [autoMessageSent, setAutoMessageSent] = useState(false); // Track if auto message has been sent
-
-  useEffect(() => {
-    // Auto-message after 20 seconds
-    if (!autoMessageSent) {
-      const timer = setTimeout(() => {
-        const newMessage = { text: 'Please upload your resume to begin.', isAuto: true };
-        setMessages([...messages, newMessage]);
-        setAutoMessageSent(true); // Prevent future auto-messages
-        onAutoMessage(); // Trigger progress bar update
-      }, 5000); // 5 seconds
-
-      return () => clearTimeout(timer); // Cleanup the timer on component unmount
-    }
-  }, [autoMessageSent, messages, onAutoMessage]);
 
   const handleSend = async () => {
     if (input.trim()) {
-
-      
-      
-      
-      
       setMessages(messages => [
         ...messages, 
         { role: "user", content: input }
       ]);
     }
 
-    try {
-      // Send the user's message to the FastAPI backend
-      const response = await fetch("http://127.0.0.1:8000/chat", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ message: input }),
-      });
+    try{
+    // Send the message to the server for processing and usage in API calls
+    //uses the standard localhost endpoint for now, will most likely have a custom one
+    const response = await fetch('http://127.0.0.1:8000/chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ message: input })
+    });
 
-      if (!response.ok) throw new Error("Failed to get response from the server");
+    const data = await response.json();
 
-      const data = await response.json();
-      const aiMessage = { role: "assistant", content: data.response };
-
-      // Append AI response to chat
-      setMessages((prevMessages) => [...prevMessages, aiMessage]);
-      setInput(""); // Clear input field
+    setMessages(messages => [
+      ...messages, 
+      { role: "assistant", content: data.response } //assistant as in API
+    ]);
 
     } catch (error) {
-      console.error("Error:", error);
-      
-      
-      
-      
-      
-      const newMessage = { text: input, isAuto: false }; // Regular user message
-      setMessages([...messages, newMessage]);
-      setInput("");
+      console.error('Error generating a response:', error);
     }
+
+    setInput(""); // Clear the input field after usage
+
   };
 
   const handleKeyPress = (event) => {
@@ -89,12 +61,6 @@ const ChatBox = ({onResumeUpload, onAutoMessage, onDownloadClick}) => {
           <div className={`message ${msg.role}`} key={index}>
           {msg.content} {/* Rendering just the content of each message */}
         </div>
-          <div
-            className={`message ${msg.isAuto ? 'auto-message' : ''}`}
-            key={index}
-          >
-            {msg.text}
-          </div>
         ))}
       </div>
 
@@ -116,7 +82,6 @@ const ChatBox = ({onResumeUpload, onAutoMessage, onDownloadClick}) => {
           onKeyPress={handleKeyPress} // Add the key press handler
         />
         <button className="send-btn" onClick={handleSend}>Send</button>
-        <button className='finished-btn' onClick={onDownloadClick}>Finished</button>
       </div>
     </div>
   );

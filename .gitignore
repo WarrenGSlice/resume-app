@@ -1,9 +1,8 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
-# api key (kyle's key, just for testing)
+# api key (+ kyles notes + testing files)
 .env
 kylesnotes.txt
-/backend/test_server.py
 
 # dependencies
 /node_modules
